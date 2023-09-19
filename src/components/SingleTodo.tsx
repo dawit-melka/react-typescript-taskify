@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
 import { Draggable } from "react-beautiful-dnd";
-
+import {IoArrowUndoSharp} from "react-icons/io5"
 import { Todo } from "../model";
 import "./styles.css";
 
@@ -11,9 +11,11 @@ interface Props {
   todo: Todo;
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  completedTodos: Todo[];
+  setCompletedTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
-const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos, index }) => {
+const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos, index, completedTodos, setCompletedTodos}) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editText, setEditText] = useState<string>(todo.todo);
 
@@ -33,14 +35,44 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos, index }) => {
 
   const handleDelete = (id: number) => {
     setTodos(todos.filter((todo) => todo.id !== id));
+    setCompletedTodos(completedTodos.filter((todo) => todo.id !== id));
   };
 
   const handleDone = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-      )
-    );
+    
+    // console.log(todos);
+    let newTodos: Todo[] = [];
+    let newCompleted: Todo[] = [];
+    console.log("-----")
+    console.log(todos)
+    console.log(completedTodos)
+    for(let i = 0; i < todos.length; i++){
+      if(todos[i].id == id){
+        todos[i].isDone = !todos[i].isDone
+        newCompleted.push(todos[i])
+      }else {
+        newTodos.push(todos[i])
+      }
+    }
+
+    for(let i = 0; i < completedTodos.length; i++){
+      if(completedTodos[i].id == id){
+        completedTodos[i].isDone = !completedTodos[i].isDone
+        newTodos.push(completedTodos[i])
+      }else {
+        newCompleted.push(completedTodos[i])
+      }      
+    }
+
+    
+
+    
+    
+    console.log({"newTodos": newTodos})
+    console.log({"newCompleted": newCompleted})
+
+    setCompletedTodos(newCompleted);
+    setTodos(newTodos);
   };
   return (
     <Draggable draggableId={todo.id.toString()} index={index}>
@@ -79,13 +111,13 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos, index }) => {
                   : setEdit(false);
               }}
             >
-              <AiFillEdit />
+             {!todo.isDone? <AiFillEdit />:<></>}
             </span>
             <span className="icon" onClick={() => handleDelete(todo.id)}>
               <AiFillDelete />
             </span>
             <span className="icon" onClick={() => handleDone(todo.id)}>
-              <MdDone />
+            {todo.isDone?<IoArrowUndoSharp/> : <MdDone />}
             </span>
           </div>
         </form>

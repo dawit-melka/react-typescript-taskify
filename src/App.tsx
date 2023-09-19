@@ -24,8 +24,7 @@ const App: React.FC = () => {
 
     if (
       !destination ||
-      (destination.droppableId == source.droppableId &&
-        destination.index == source.index)
+      (destination.droppableId == source.droppableId)
     )
       return;
     let add,
@@ -33,10 +32,12 @@ const App: React.FC = () => {
       complete = completedTodos;
     if (source.droppableId == 'TodosList') {
       add = active[source.index];
+      add.isDone = !add.isDone
       //remove the element at that index
       active.splice(source.index, 1);
     } else {
       add = complete[source.index];
+      add.isDone = !add.isDone
       complete.splice(source.index, 1);
     }
 

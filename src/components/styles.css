@@ -62,7 +62,7 @@
 }
 
 .remove {
-    background-color: rgba(255, 0, 0, 0.489);
+    background-color: rgb(135, 220, 7);
 }
 
 .dragactive {
@@ -70,7 +70,7 @@
 }
 
 .dragcomplete {
-    background-color: rgb(255, 38, 0);
+    background-color: greenyellow;
 }
 
 .drag {
@@ -79,7 +79,6 @@
 
 .todos__heading {
     font-size: 30px;
-    color: white;
 }
 
 .todos__single {
